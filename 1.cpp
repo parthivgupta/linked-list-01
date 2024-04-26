@@ -16,6 +16,10 @@ public:
         this->data = data;
         this->next = NULL;
     }
+    ~Node()
+    {
+        cout << "destructor called for : " << this->data << endl;
+    }
 };
 
 void printLL(Node *head)
@@ -36,7 +40,6 @@ int getLength(Node *head)
         count++;
         temp = temp->next;
     }
-    cout << "length of linked list is : " << count << endl;
     return count;
 };
 
@@ -121,6 +124,48 @@ void insertAtPosition(Node *&head, Node *&tail, int data, int position)
         newNode->next = curr;
     }
 }
+void deleteNode(Node *&head, Node *&tail, int position)
+{
+    int length = getLength(head);
+
+    if (head == NULL)
+    {
+        cout << "Node cannot be deleted";
+        return;
+    }
+    if (position == 1)
+    {
+        Node *temp = head;
+        head = head->next;
+        temp->next = NULL;
+        delete temp;
+    }
+    else if (position == length)
+    {
+        Node *prev = head;
+        while (prev->next != tail)
+        {
+            prev = prev->next;
+        }
+        prev->next = NULL;
+        delete tail;
+        tail = prev;
+    }
+    else
+    {
+        Node *prev = NULL;
+        Node *curr = NULL;
+        while (position != 1)
+        {
+            position--;
+            prev = curr;
+            curr = curr->next;
+        }
+        prev->next = curr->next;
+        curr->next = NULL;
+        delete curr;
+    }
+}
 
 int main()
 {
@@ -160,4 +205,8 @@ int main()
     insertAtTail(head, tail, 50);
     insertAtPosition(head, tail, 70, 4);
     printLL(head);
+
+    deleteNode(head, tail, 1);
+    printLL(head);
+    // cout << getLength(head) << endl;
 }
